@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUDA - Technology - Knowledge Repository</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>CUDA</h1>
+        <p><a href="../../index.html">Home</a> > <a href="index.html">Technology</a> > CUDA</p>
+    </header>
+
+    <main>
+        <article class="content">
+            <h2>CUDA: Parallel Computing Platform</h2>
+
+            <section>
+                <h3>Introduction to CUDA</h3>
+                <p>CUDA (Compute Unified Device Architecture) is NVIDIA's parallel computing platform and programming
+                    model that enables dramatic increases in computing performance by harnessing the power of the GPU
+                    (Graphics Processing Unit). CUDA was introduced in 2006 and has since become one of the most widely
+                    used platforms for general-purpose GPU computing (GPGPU).</p>
+            </section>
+
+            <section>
+                <h3>CUDA Architecture</h3>
+                <ul>
+                    <li><strong>GPU Hardware</strong>: CUDA-enabled GPUs contain hundreds or thousands of cores that can
+                        execute thousands of threads simultaneously.</li>
+                    <li><strong>Memory Hierarchy</strong>: Includes global, shared, local, constant, and texture memory,
+                        each with different access patterns and performance characteristics.</li>
+                    <li><strong>SIMT Execution</strong>: Single Instruction, Multiple Thread execution model allows for
+                        massive parallelism.</li>
+                    <li><strong>Streaming Multiprocessors</strong>: Groups of CUDA cores that execute thread blocks in
+                        parallel.</li>
+                    <li><strong>Warp Execution</strong>: Groups of 32 threads that execute instructions in lockstep
+                        within an SM.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>CUDA Programming Model</h3>
+                <p>CUDA programming involves writing both host (CPU) and device (GPU) code. The host code manages memory
+                    allocation, data transfers, and kernel launches, while device code runs on the GPU in parallel.
+                    Programs are written in "CUDA C/C++", which is an extension of standard C/C++ with keywords for
+                    parallel execution. The basic execution unit is a thread, which are grouped into blocks and grids
+                    for execution on the GPU.</p>
+            </section>
+
+            <section>
+                <h3>Key CUDA Concepts</h3>
+                <ul>
+                    <li><strong>Kernels</strong>: Special functions that run on the GPU and are executed by many threads
+                        in parallel.</li>
+                    <li><strong>Thread Hierarchy</strong>: Threads are organized into blocks, and blocks are organized
+                        into grids.</li>
+                    <li><strong>Memory Management</strong>: Explicit allocation and copying between host and device
+                        memory.</li>
+                    <li><strong>Synchronization</strong>: Methods to coordinate execution between threads and between
+                        host and device.</li>
+                    <li><strong>CUDA Libraries</strong>: Ready-to-use libraries like cuBLAS, cuDNN, and Thrust that
+                        provide optimized implementations of common algorithms.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Simple CUDA Example</h3>
+                <pre><code>
+// Vector addition kernel
+__global__ void vectorAdd(float* A, float* B, float* C, int n) {
+    int i = blockDim.x * blockIdx.x + threadIdx.x;
+    if (i < n) {
+        C[i] = A[i] + B[i];
+    }
+}
+
+int main() {
+    // Allocate and initialize host memory...
+    
+    // Allocate device memory
+    float *d_A, *d_B, *d_C;
+    cudaMalloc(&d_A, size);
+    cudaMalloc(&d_B, size);
+    cudaMalloc(&d_C, size);
+    
+    // Copy data from host to device
+    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+    
+    // Launch kernel
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (n + threadsPerBlock - 1) / threadsPerBlock;
+    vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, n);
+    
+    // Copy result back to host
+    cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+    
+    // Free memory...
+    
+    return 0;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Applications of CUDA</h3>
+                <p>CUDA has revolutionized numerous fields by accelerating computationally intensive tasks. Some major
+                    application areas include deep learning and AI, scientific simulations, computational physics,
+                    medical imaging, computer vision, computational finance, and cryptography. The ability to
+                    parallelize operations like matrix multiplications has made CUDA particularly valuable for deep
+                    learning frameworks such as TensorFlow, PyTorch, and NVIDIA's own cuDNN library.</p>
+            </section>
+        </article>
+    </main>
+
+    <footer>
+        <p>Knowledge Repository - Contribute on GitHub</p>
+    </footer>
+</body>
+
+</html>
